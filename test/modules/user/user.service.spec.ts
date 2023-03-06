@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from '../../../src/modules/user/user.model';
+import { IUser } from '../../../src/modules/user/user.interface';
 import { UserService } from '../../../src/modules/user/user.service';
 
 describe('UserService', () => {
   let service: UserService;
-  let userModel: Model<User>;
+  let userModel: Model<IUser>;
 
-  const mockUser: User = {
+  const mockUser = {
     _id: '605d27edf44ab71f8c2d3773',
     name: 'John Doe',
     email: 'johndoe@example.com',
@@ -20,7 +20,7 @@ describe('UserService', () => {
       providers: [
         UserService,
         {
-          provide: getModelToken(User.name),
+          provide: getModelToken(IUser.name),
           useValue: {
             find: jest.fn(),
             findById: jest.fn(),
@@ -33,7 +33,7 @@ describe('UserService', () => {
     }).compile();
 
     service = module.get<UserService>(UserService);
-    userModel = module.get<Model<User>>(getModelToken(User.name));
+    userModel = module.get<Model<IUser>>(getModelToken(IUser.name));
   });
 
   afterEach(() => {
@@ -84,7 +84,7 @@ describe('UserService', () => {
     it('should update an existing user', async () => {
       jest.spyOn(userModel, 'findByIdAndUpdate').mockResolvedValueOnce(mockUser);
 
-      const updatedUser: User = {
+      const updatedUser = {
         _id: mockUser._id,
         name: 'John Doe',
         email: 'johndoe@example.com',

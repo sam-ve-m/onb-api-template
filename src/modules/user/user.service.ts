@@ -1,29 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User } from './user.model';
+import { IUser } from './user.interface';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
-  async findAll(): Promise<User[]> {
-    return this.userModel.find();
+  async findAll(): Promise<IUser[]> {
+    return this.userRepository.findAll();
   }
 
-  async findById(id: string): Promise<User> {
-    return this.userModel.findById(id);
+  async findById(id: string): Promise<IUser> {
+    return this.userRepository.findById(id);
   }
 
-  async create(user: User): Promise<User> {
-    return this.userModel.create(user);
+  async create(user: IUser): Promise<IUser> {
+    return this.userRepository.create(user);
   }
 
-  async update(id: string, user: User): Promise<User> {
-    return this.userModel.findByIdAndUpdate(id, user, { new: true });
+  async update(id: string, user: IUser): Promise<IUser> {
+    return this.userRepository.update(id, user);
   }
 
-  async delete(id: string): Promise<User> {
-    return this.userModel.findByIdAndRemove(id);
+  async delete(id: string): Promise<IUser> {
+    return this.userRepository.delete(id);
   }
 }
