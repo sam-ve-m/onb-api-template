@@ -15,12 +15,6 @@ export class EnvironmentVariables {
   @IsOptional()
   PORT?: number;
 
-  @IsNumber()
-  DB_PORT: number;
-
   @IsString()
-  DB_HOST: string;
-
-  @IsString()
-  DB_NAME: string;
+  MONGO_CONNECTION_URL: string;
 }
