@@ -11,8 +11,11 @@
 ### create a local .env
 
 ``` text
-NODE_ENV=local
 PORT=3000
+NODE_ENV=dev
+DB_HOST=localhost
+DB_PORT=27017
+DB_NAME=nestjs-mongoose
 ```
 
 ```bash
