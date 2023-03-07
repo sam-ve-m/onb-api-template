@@ -9,7 +9,7 @@ describe('UserService', () => {
   let service: UserService;
   let userModel: Model<User>;
 
-  const mockUser = {
+  const mockUser: User = {
     _id: '605d27edf44ab71f8c2d3773',
     name: 'John Doe',
     email: 'johndoe@example.com',
@@ -65,22 +65,20 @@ describe('UserService', () => {
     });
   });
 
-  // describe('create', () => {
-  //   it('should create a new user', async () => {
-  //     jest.spyOn(userModel, 'create').mockResolvedValueOnce(mockUser);
+  describe('create', () => {
+    it('should create a new user', async () => {
+      const newUser: User = {
+        name: 'Jane Doe',
+        email: 'janedoe@example.com',
+        password: 'abcdef',
+      };
+      const createdUser = await service.create(newUser);
 
-  //     const newUser: User = {
-  //       name: 'Jane Doe',
-  //       email: 'janedoe@example.com',
-  //       password: 'abcdef',
-  //     };
-  //     const createdUser = await service.create(newUser);
-
-  //     expect(createdUser).toEqual(mockUser);
-  //     expect(userModel.create).toHaveBeenCalledTimes(1);
-  //     expect(userModel.create).toHaveBeenCalledWith(newUser);
-  //   });
-  // });
+      expect(createdUser).toBeUndefined();
+      expect(userModel.create).toHaveBeenCalledTimes(1);
+      expect(userModel.create).toHaveBeenCalledWith(newUser);
+    });
+  });
 
   describe('update', () => {
     it('should update an existing user', async () => {
