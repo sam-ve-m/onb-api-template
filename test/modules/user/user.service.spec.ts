@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { IUser } from '../../../src/modules/user/user.interface';
+import { User } from '../../../src/modules/user/user.model';
 import { UserService } from '../../../src/modules/user/user.service';
+import { UserRepository } from '../../../src/modules/user/user.repository';
 
 describe('UserService', () => {
   let service: UserService;
-  let userModel: Model<IUser>;
+  let userModel: Model<User>;
 
   const mockUser = {
     _id: '605d27edf44ab71f8c2d3773',
@@ -19,8 +20,9 @@ describe('UserService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
+        UserRepository,
         {
-          provide: getModelToken(IUser.name),
+          provide: getModelToken(User.name),
           useValue: {
             find: jest.fn(),
             findById: jest.fn(),
@@ -33,7 +35,7 @@ describe('UserService', () => {
     }).compile();
 
     service = module.get<UserService>(UserService);
-    userModel = module.get<Model<IUser>>(getModelToken(IUser.name));
+    userModel = module.get<Model<User>>(getModelToken(User.name));
   });
 
   afterEach(() => {
