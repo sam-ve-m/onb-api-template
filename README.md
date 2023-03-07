@@ -14,6 +14,7 @@
 PORT=3000
 NODE_ENV=dev
 MONGO_CONNECTION_URL=localhost
+DB_NAME=lionx
 ```
 
 ```bash

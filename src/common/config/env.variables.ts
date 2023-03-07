@@ -17,4 +17,7 @@ export class EnvironmentVariables {
 
   @IsString()
   MONGO_CONNECTION_URL: string;
+
+  @IsString()
+  DB_NAME: string;
 }
