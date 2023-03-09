@@ -5,6 +5,7 @@ import { TerminusModule } from '@nestjs/terminus';
 import { envValidate } from './common/config/env.validation';
 import { HealthController } from './modules/health/health.controller';
 import { DatabaseModule } from './common/database/database.module';
+import { UsersModule } from './modules/user/user.module';
 
 @Module({
   controllers: [HealthController],
@@ -15,6 +16,7 @@ import { DatabaseModule } from './common/database/database.module';
       validate: envValidate,
     }),
     TerminusModule,
+    UsersModule,
     DatabaseModule,
   ],
 })

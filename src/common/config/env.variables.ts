@@ -1,4 +1,4 @@
-import { IsEnum, IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export enum NodeEnv {
   Local = 'local',
@@ -12,10 +12,11 @@ export class EnvironmentVariables {
   NODE_ENV: NodeEnv;
 
   @IsNumber()
-  PORT: number;
+  @IsOptional()
+  PORT?: number;
 
   @IsString()
-  DB_HOST: string;
+  MONGO_CONNECTION_URL: string;
 
   @IsString()
   DB_NAME: string;
