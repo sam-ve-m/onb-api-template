@@ -9,25 +9,32 @@ export class RedisRepository {
     this.redis = new Redis(redisConfig);
   }
 
-  async findAll(keyPattern: string): Promise<any[]> {
-    const keys = await this.redis.keys(keyPattern);
-    const values = keys.map(async (key) => await this.redis.get(key));
-    return Promise.all(values);
+  async getKeys(keyPattern: string): Promise<string[]> {
+    return this.redis.keys(keyPattern);
   }
 
-  async findById(key: string): Promise<any> {
+  async get(key: string): Promise<any> {
     return this.redis.get(key);
   }
 
-  async create(key: string, value: any, expiryInSeconds: number = undefined): Promise<void> {
+  async set(key: string, value: any, expiryInSeconds: number = undefined): Promise<void> {
     return expiryInSeconds ? this.redis.set(key, value, 'EX', expiryInSeconds) : this.redis.set(key, value);
-  }
-
-  async update(key: string, value: any, expiryInSeconds: number = undefined): Promise<void> {
-    return this.create(key, value, expiryInSeconds);
   }
 
   async delete(key: string): Promise<void> {
     return this.redis.del(key);
+  }
+
+  async findAll(keyPattern: string): Promise<any[]> {
+    const keys = await this.getKeys(keyPattern);
+    return Promise.all(keys.map((key) => this.get(key)));
+  }
+
+  async create(key: string, value: any, expiryInSeconds: number = undefined): Promise<void> {
+    return this.set(key, value, expiryInSeconds);
+  }
+
+  async update(key: string, value: any, expiryInSeconds: number = undefined): Promise<void> {
+    return this.set(key, value, expiryInSeconds);
   }
 }
