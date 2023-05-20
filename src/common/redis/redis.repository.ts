@@ -1,28 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { Redis, RedisService } from 'nestjs-redis';
+import { RedisService } from 'nestjs-redis';
 
 @Injectable()
 export class RedisRepository {
-  private readonly redisClient: Redis;
+  constructor(private readonly redisService: RedisService) {}
 
-  constructor(private readonly redisService: RedisService) {
-    this.redisClient = this.redisService.getClient();
+  private getClient() {
+    return this.redisService.getClient();
   }
 
   public async getMultipleValues(keys: string[]): Promise<string[]> {
     if (!keys.length) return [];
-    return this.redisClient.mget(keys);
+    const client = this.getClient();
+    return client.mget(...keys);
   }
 
   public async getRangeFromSortedSet(key: string, offset = 0, limit = 100): Promise<string[]> {
-    return this.redisClient.zrange(key, Number(offset), Number(limit));
+    const client = this.getClient();
+    return client.zrange(key, offset, limit);
   }
 
   public async getKeysByPattern(pattern: string): Promise<string[]> {
-    return this.redisClient.keys(`*${pattern}*`);
+    const client = this.getClient();
+    return client.keys(`*${pattern}*`);
   }
 
   public async getDatabaseSize(): Promise<number> {
-    return this.redisClient.dbsize();
+    const client = this.getClient();
+    return client.dbsize();
   }
 }
