@@ -1,19 +1,18 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { RedisModule as RedisModuleNest } from 'nestjs-redis';
-import { SecretService } from '../aws/secret-manager/secret.service';
 
 @Module({
-    imports: [
-        RedisModuleNest.forRootAsync({
-            useFactory: async (secreatService: SecretService) => {
-                const connection = await secreatService.getSecret();
-                return {
-                    url: connection.dbRedisHost,
-                };
-            },
-            inject: [SecretService],
-        }),
-    ],
-    providers: [],
+  imports: [
+    RedisModuleNest.forRootAsync({
+      useFactory: async (configService: ConfigService) => {
+        return {
+          url: configService.get(`REDIS_CONFIG`),
+        };
+      },
+      inject: [ConfigService],
+    }),
+  ],
+  providers: [],
 })
 export class RedisModule {}
