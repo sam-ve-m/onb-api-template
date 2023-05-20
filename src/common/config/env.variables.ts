@@ -20,4 +20,7 @@ export class EnvironmentVariables {
 
   @IsString()
   DB_NAME: string;
+
+  @IsString()
+  REDIS_CONFIG: string;
 }
